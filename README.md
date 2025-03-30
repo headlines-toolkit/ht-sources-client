@@ -1,8 +1,5 @@
 # ht_sources_client
 
-[![Coverage Badge](coverage_badge.svg)](https://github.com/headlines-toolkit/ht-sources-client/actions/workflows/coverage.yaml)
-[![License: PolyForm Free Trial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Free%20Trial%201.0.0-blue)](LICENSE)
-
 A Dart client interface for managing news sources.
 
 This package provides an abstract interface (`HtSourcesClient`) and data models (`Source`) for interacting with a news source backend. It defines the contract but does not include a concrete implementation.
