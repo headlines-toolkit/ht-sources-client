@@ -12,7 +12,7 @@ part 'source.g.dart';
 @JsonSerializable()
 class Source extends Equatable {
   /// {@macro source}
-  Source({
+   Source({
     required this.name,
     this.description,
     this.url,
