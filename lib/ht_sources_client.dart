@@ -1,4 +1,15 @@
-/// A Very Good Project created by Very Good CLI.
-library;
+/// A Dart client interface for managing news sources.
+library ht_sources_client;
 
-export 'src/ht_sources_client.dart';
+// Core Client Interface and Exceptions
+export 'src/ht_sources_client.dart'
+    show
+        HtSourcesClient,
+        SourceFetchFailure,
+        SourceNotFoundException,
+        SourceCreateFailure,
+        SourceUpdateFailure,
+        SourceDeleteFailure;
+
+// Models
+export 'src/models/source.dart' show Source;
