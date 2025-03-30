@@ -1,15 +1,15 @@
 /// A Dart client interface for managing news sources.
-library ht_sources_client;
+library;
 
 // Core Client Interface and Exceptions
 export 'src/ht_sources_client.dart'
     show
         HtSourcesClient,
+        SourceCreateFailure,
+        SourceDeleteFailure,
         SourceFetchFailure,
         SourceNotFoundException,
-        SourceCreateFailure,
-        SourceUpdateFailure,
-        SourceDeleteFailure;
+        SourceUpdateFailure;
 
 // Models
 export 'src/models/source.dart' show Source;

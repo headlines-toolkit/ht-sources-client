@@ -95,11 +95,6 @@ void main() {
             Source(
               id: testId,
               name: testName,
-              description: null,
-              url: null,
-              category: null,
-              language: null,
-              country: null,
             ),
           ),
         );
@@ -114,17 +109,17 @@ void main() {
         );
       });
 
-       test('handles null optional fields', () {
-         final source = Source(id: testId, name: testName);
-         final expectedJson = {
-           'id': testId,
-           'name': testName,
-           'description': null,
-           'url': null,
-           'category': null,
-           'language': null,
-           'country': null,
-         };
+      test('handles null optional fields', () {
+        final source = Source(id: testId, name: testName);
+        final expectedJson = {
+          'id': testId,
+          'name': testName,
+          'description': null,
+          'url': null,
+          'category': null,
+          'language': null,
+          'country': null,
+        };
         expect(
           source.toJson(),
           equals(expectedJson),
@@ -142,7 +137,6 @@ void main() {
         final source = createSubject(id: testId);
         final updatedSource = source.copyWith(
           name: 'Updated Name',
-          description: null,
           country: 'ca',
         );
 

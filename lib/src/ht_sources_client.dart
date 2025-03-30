@@ -70,7 +70,6 @@ class SourceDeleteFailure implements Exception {
   String toString() => 'SourceDeleteFailure: $message';
 }
 
-
 /// {@template ht_sources_client}
 /// An abstract interface for a client that manages news sources.
 ///
