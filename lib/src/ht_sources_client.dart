@@ -107,7 +107,7 @@ abstract class HtSourcesClient {
 
   /// Updates an existing news source.
   ///
-  /// Takes a [Source] object with an existing [id] and updated fields.
+  /// Takes a [Source] object with an existing [Source.id] and updated fields.
   /// Returns the updated [Source].
   ///
   /// Throws a [SourceNotFoundException] if the source to update doesn't exist.
