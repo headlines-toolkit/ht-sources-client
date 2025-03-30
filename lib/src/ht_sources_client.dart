@@ -1,3 +1,6 @@
+//
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:ht_sources_client/src/models/source.dart';
 
 /// {@template source_fetch_failure}
