@@ -35,17 +35,32 @@ Example using a hypothetical `MySourcesClient` implementation:
 // Assume MySourcesClient implements HtSourcesClient
 final HtSourcesClient sourcesClient = MySourcesClient();
 
-Future<void> fetchAndPrintSources() async {
+Future<void> fetchAndPrintSources({int? limit, String? startAfterId}) async {
   try {
-    final List<Source> sources = await sourcesClient.getSources();
+    print('\nFetching sources${startAfterId != null ? ' starting after $startAfterId' : ''}${limit != null ? ' with limit $limit' : ''}...');
+    final List<Source> sources = await sourcesClient.getSources(
+      limit: limit,
+      startAfterId: startAfterId,
+    );
+
     if (sources.isEmpty) {
-      print('No sources found.');
-    } else {
-      print('Fetched ${sources.length} sources:');
-      for (final source in sources) {
-        print('- ${source.name} (${source.id})');
-      }
+      print('No more sources found.');
+      return; // Stop if no more sources
     }
+
+    print('Fetched ${sources.length} sources:');
+    String? lastId;
+    for (final source in sources) {
+      print('- ${source.name} (${source.id})');
+      lastId = source.id; // Keep track of the last ID
+    }
+
+    // Example: Fetch the next page if there might be more
+    if (lastId != null && (limit == null || sources.length == limit)) {
+      // In a real app, you'd likely trigger this based on user scrolling
+      await fetchAndPrintSources(limit: limit, startAfterId: lastId);
+    }
+
   } on SourceFetchFailure catch (e) {
     print('Error fetching sources: $e');
   } catch (e) {
@@ -54,13 +69,15 @@ Future<void> fetchAndPrintSources() async {
 }
 
 Future<void> main() async {
-  await fetchAndPrintSources();
+  // Example: Fetch the first page with a limit of 5
+  await fetchAndPrintSources(limit: 5);
 }
 
 ```
 
 This package defines:
 *   `HtSourcesClient`: The abstract class (interface) for CRUD operations.
+    *   `getSources`: Now supports pagination via optional `limit` and `startAfterId` parameters.
 *   `Source`: The data model for a news source.
 *   Custom Exceptions (`SourceFetchFailure`, `SourceNotFoundException`, etc.) for error handling.
 
