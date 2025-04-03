@@ -99,11 +99,21 @@ abstract class HtSourcesClient {
   /// Throws a [SourceFetchFailure] for other fetch-related errors.
   Future<Source> getSource({required String id});
 
-  /// Retrieves a list of all available news sources.
+  /// Retrieves a list of available news sources, supporting pagination
+  /// for infinite scrolling.
   ///
-  /// Returns an empty list if no sources are available.
+  /// [limit]: An optional parameter to specify the maximum number of sources
+  ///          to fetch in this request. Implementations may have their own
+  ///          default or maximum limits.
+  /// [startAfterId]: An optional parameter. If provided, the query will fetch
+  ///                 sources that appear *after* the source with this ID
+  ///                 according to the backend's default sort order. This is
+  ///                 used to fetch the next page of results.
+  ///
+  /// Returns a `List<Source>`. The list might be empty if no more sources
+  /// are available or if the `startAfterId` refers to the last available source.
   /// Throws a [SourceFetchFailure] if the operation fails.
-  Future<List<Source>> getSources();
+  Future<List<Source>> getSources({int? limit, String? startAfterId});
 
   /// Updates an existing news source.
   ///
