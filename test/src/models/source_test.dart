@@ -78,35 +78,21 @@ void main() {
 
     group('fromJson', () {
       test('works correctly', () {
-        expect(
-          Source.fromJson(sourceJson),
-          equals(createSubject(id: testId)),
-        );
+        expect(Source.fromJson(sourceJson), equals(createSubject(id: testId)));
       });
 
       test('handles missing optional fields', () {
-        final minimalJson = {
-          'id': testId,
-          'name': testName,
-        };
+        final minimalJson = {'id': testId, 'name': testName};
         expect(
           Source.fromJson(minimalJson),
-          equals(
-            Source(
-              id: testId,
-              name: testName,
-            ),
-          ),
+          equals(Source(id: testId, name: testName)),
         );
       });
     });
 
     group('toJson', () {
       test('works correctly', () {
-        expect(
-          createSubject(id: testId).toJson(),
-          equals(sourceJson),
-        );
+        expect(createSubject(id: testId).toJson(), equals(sourceJson));
       });
 
       test('handles null optional fields', () {
@@ -120,10 +106,7 @@ void main() {
           'language': null,
           'country': null,
         };
-        expect(
-          source.toJson(),
-          equals(expectedJson),
-        );
+        expect(source.toJson(), equals(expectedJson));
       });
     });
 

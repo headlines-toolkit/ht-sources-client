@@ -52,14 +52,14 @@ class Source extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        description,
-        url,
-        category,
-        language,
-        country,
-      ];
+    id,
+    name,
+    description,
+    url,
+    category,
+    language,
+    country,
+  ];
 
   /// Creates a new [Source] with updated properties.
   /// Use this to modify a [Source] without changing the original instance.
