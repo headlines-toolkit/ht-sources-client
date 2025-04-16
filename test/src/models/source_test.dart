@@ -1,26 +1,45 @@
+import 'package:ht_countries_client/ht_countries_client.dart';
 import 'package:ht_sources_client/src/models/source.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
+  // Mock Country data for testing
+  final testHeadquartersCountry = Country(
+    isoCode: 'US',
+    name: 'United States',
+    flagUrl: 'http://example.com/us-flag.png',
+    id: 'country-uuid-123',
+  );
+
+  final testHeadquartersJson = {
+    'id': 'country-uuid-123',
+    'iso_code': 'US',
+    'name': 'United States',
+    'flag_url': 'http://example.com/us-flag.png',
+  };
+
   group('Source Model', () {
     const uuid = Uuid();
     final testId = uuid.v4();
     const testName = 'Test Source';
     const testDescription = 'A source for testing purposes';
     const testUrl = 'https://example.com/source';
-    const testCategory = 'testing';
+    const testType = SourceType.nationalNewsOutlet;
+    const testTypeString = 'national-news-outlet'; // kebab-case for JSON
     const testLanguage = 'en';
-    const testCountry = 'us';
+    const testCountry = 'us'; // Keep this as it's still in the model
+    final testHeadquarters = testHeadquartersCountry;
 
     final sourceJson = {
       'id': testId,
       'name': testName,
       'description': testDescription,
       'url': testUrl,
-      'category': testCategory,
+      'type': testTypeString,
       'language': testLanguage,
       'country': testCountry,
+      'headquarters': testHeadquartersJson,
     };
 
     Source createSubject({
@@ -28,18 +47,20 @@ void main() {
       String name = testName,
       String? description = testDescription,
       String? url = testUrl,
-      String? category = testCategory,
+      SourceType? type = testType,
       String? language = testLanguage,
       String? country = testCountry,
+      Country? headquarters, // Remove default value here
     }) {
       return Source(
-        id: id,
+        id: id ?? uuid.v4(), // Ensure ID is always present for tests
         name: name,
         description: description,
         url: url,
-        category: category,
+        type: type,
         language: language,
         country: country,
+        headquarters: headquarters ?? testHeadquarters, // Assign default here if null
       );
     }
 
@@ -69,9 +90,10 @@ void main() {
           testName,
           testDescription,
           testUrl,
-          testCategory,
+          testType,
           testLanguage,
           testCountry,
+          testHeadquarters,
         ]),
       );
     });
@@ -83,9 +105,21 @@ void main() {
 
       test('handles missing optional fields', () {
         final minimalJson = {'id': testId, 'name': testName};
+        // Expect default values (null) for optional fields
         expect(
           Source.fromJson(minimalJson),
-          equals(Source(id: testId, name: testName)),
+          equals(
+            Source(
+              id: testId,
+              name: testName,
+              description: null,
+              url: null,
+              type: null,
+              language: null,
+              country: null,
+              headquarters: null,
+            ),
+          ),
         );
       });
     });
@@ -102,9 +136,10 @@ void main() {
           'name': testName,
           'description': null,
           'url': null,
-          'category': null,
+          'type': null, // Enum to null directly
           'language': null,
           'country': null,
+          'headquarters': null, // Object to null
         };
         expect(source.toJson(), equals(expectedJson));
       });
@@ -118,26 +153,34 @@ void main() {
 
       test('returns object with updated properties', () {
         final source = createSubject(id: testId);
+        final newHeadquarters = Country(
+          isoCode: 'CA',
+          name: 'Canada',
+          flagUrl: 'http://example.com/ca-flag.png',
+          id: 'country-uuid-456',
+        );
         final updatedSource = source.copyWith(
           name: 'Updated Name',
-          country: 'ca',
+          type: SourceType.localNewsOutlet,
+          headquarters: newHeadquarters,
         );
 
         final expectedSource = Source(
           id: testId,
-          name: 'Updated Name',
-          description: testDescription, // Should keep original value
+          name: 'Updated Name', // Updated
+          description: testDescription,
           url: testUrl,
-          category: testCategory,
+          type: SourceType.localNewsOutlet, // Updated
           language: testLanguage,
-          country: 'ca', // Updated
+          country: testCountry,
+          headquarters: newHeadquarters, // Updated
         );
 
         expect(updatedSource, equals(expectedSource));
         // Ensure original is unchanged
         expect(source.name, equals(testName));
-        expect(source.description, equals(testDescription));
-        expect(source.country, equals(testCountry));
+        expect(source.type, equals(testType));
+        expect(source.headquarters, equals(testHeadquarters));
       });
     });
   });
