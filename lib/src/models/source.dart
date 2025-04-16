@@ -8,31 +8,40 @@ part 'source.g.dart';
 /// Enum representing the type of news source.
 @JsonEnum(fieldRename: FieldRename.kebab)
 enum SourceType {
-  /// A global news agency (e.g., Reuters, Associated Press, Agence France-Presse).
+  /// A global news agency
+  /// (e.g., Reuters, Associated Press, Agence France-Presse).
   newsAgency,
 
-  /// A news outlet focused on a specific local area (e.g., San Francisco Chronicle, Manchester Evening News).
+  /// A news outlet focused on a specific local area
+  /// (e.g., San Francisco Chronicle, Manchester Evening News).
   localNewsOutlet,
 
-  /// A news outlet focused on a specific country (e.g., BBC News (UK), The New York Times (US)).
+  /// A news outlet focused on a specific country
+  /// (e.g., BBC News (UK), The New York Times (US)).
   nationalNewsOutlet,
 
-  /// A news outlet with a broad international focus (e.g., Al Jazeera English, CNN International).
+  /// A news outlet with a broad international focus
+  /// (e.g., Al Jazeera English, CNN International).
   internationalNewsOutlet,
 
-  /// A publisher focused on a specific topic (e.g., TechCrunch (technology), ESPN (sports), Nature (science)).
+  /// A publisher focused on a specific topic
+  /// (e.g., TechCrunch (technology), ESPN (sports), Nature (science)).
   specializedPublisher,
 
-  /// A blog or personal publication (e.g., Stratechery by Ben Thompson).
+  /// A blog or personal publication
+  /// (e.g., Stratechery by Ben Thompson).
   blog,
 
-  /// An official government source (e.g., WhiteHouse.gov, gov.uk).
+  /// An official government source
+  /// (e.g., WhiteHouse.gov, gov.uk).
   governmentSource,
 
-  /// A service that aggregates news from other sources (e.g., Google News, Apple News).
+  /// A service that aggregates news from other sources
+  /// (e.g., Google News, Apple News).
   aggregator,
 
-  /// Any other type of source not covered above (e.g., academic journals, company press releases).
+  /// Any other type of source not covered above
+  /// (e.g., academic journals, company press releases).
   other,
 }
 
@@ -50,7 +59,6 @@ class Source extends Equatable {
     this.url,
     this.type,
     this.language,
-    this.country, // Keep original country string for now if needed, or remove? Let's keep for now.
     this.headquarters,
     String? id,
   }) : id = id ?? const Uuid().v4();
@@ -67,7 +75,7 @@ class Source extends Equatable {
 
   /// A description of the source.
   final String? description;
-      
+
   /// The URL of the source's homepage.
   final String? url;
 
@@ -76,11 +84,6 @@ class Source extends Equatable {
 
   /// The language code of the source (e.g., 'en', 'fr').
   final String? language;
-
-  /// The country code of the source (e.g., 'us', 'gb').
-  /// Consider if this is still needed if headquarters provides country info.
-  /// Keeping it for now based on original structure.
-  final String? country;
 
   /// The country where the source is headquartered.
   @JsonKey(name: 'headquarters')
@@ -91,15 +94,14 @@ class Source extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        description,
-        url,
-        type,
-        language,
-        country,
-        headquarters,
-      ];
+    id,
+    name,
+    description,
+    url,
+    type,
+    language,
+    headquarters,
+  ];
 
   /// Creates a new [Source] with updated properties.
   /// Use this to modify a [Source] without changing the original instance.
@@ -110,7 +112,6 @@ class Source extends Equatable {
     String? url,
     SourceType? type,
     String? language,
-    String? country,
     Country? headquarters,
   }) {
     return Source(
@@ -120,7 +121,6 @@ class Source extends Equatable {
       url: url ?? this.url,
       type: type ?? this.type,
       language: language ?? this.language,
-      country: country ?? this.country,
       headquarters: headquarters ?? this.headquarters,
     );
   }

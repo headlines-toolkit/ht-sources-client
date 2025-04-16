@@ -28,7 +28,7 @@ void main() {
     const testType = SourceType.nationalNewsOutlet;
     const testTypeString = 'national-news-outlet'; // kebab-case for JSON
     const testLanguage = 'en';
-    const testCountry = 'us'; // Keep this as it's still in the model
+
     final testHeadquarters = testHeadquartersCountry;
 
     final sourceJson = {
@@ -38,7 +38,7 @@ void main() {
       'url': testUrl,
       'type': testTypeString,
       'language': testLanguage,
-      'country': testCountry,
+
       'headquarters': testHeadquartersJson,
     };
 
@@ -49,7 +49,7 @@ void main() {
       String? url = testUrl,
       SourceType? type = testType,
       String? language = testLanguage,
-      String? country = testCountry,
+
       Country? headquarters, // Remove default value here
     }) {
       return Source(
@@ -59,8 +59,9 @@ void main() {
         url: url,
         type: type,
         language: language,
-        country: country,
-        headquarters: headquarters ?? testHeadquarters, // Assign default here if null
+
+        headquarters:
+            headquarters ?? testHeadquarters, // Assign default here if null
       );
     }
 
@@ -92,7 +93,7 @@ void main() {
           testUrl,
           testType,
           testLanguage,
-          testCountry,
+
           testHeadquarters,
         ]),
       );
@@ -108,18 +109,7 @@ void main() {
         // Expect default values (null) for optional fields
         expect(
           Source.fromJson(minimalJson),
-          equals(
-            Source(
-              id: testId,
-              name: testName,
-              description: null,
-              url: null,
-              type: null,
-              language: null,
-              country: null,
-              headquarters: null,
-            ),
-          ),
+          equals(Source(id: testId, name: testName)),
         );
       });
     });
@@ -138,7 +128,7 @@ void main() {
           'url': null,
           'type': null, // Enum to null directly
           'language': null,
-          'country': null,
+
           'headquarters': null, // Object to null
         };
         expect(source.toJson(), equals(expectedJson));
@@ -167,13 +157,13 @@ void main() {
 
         final expectedSource = Source(
           id: testId,
-          name: 'Updated Name', // Updated
+          name: 'Updated Name',
           description: testDescription,
           url: testUrl,
-          type: SourceType.localNewsOutlet, // Updated
+          type: SourceType.localNewsOutlet,
           language: testLanguage,
-          country: testCountry,
-          headquarters: newHeadquarters, // Updated
+
+          headquarters: newHeadquarters,
         );
 
         expect(updatedSource, equals(expectedSource));
