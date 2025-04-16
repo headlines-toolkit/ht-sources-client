@@ -8,6 +8,9 @@ environment:
 
 dependencies:
   equatable: ^2.0.7
+  ht_countries_client:
+    git:
+      url: https://github.com/headlines-toolkit/ht-countries-client.git
   json_annotation: ^4.9.0
   uuid: ^4.5.1
 
