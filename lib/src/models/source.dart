@@ -1,8 +1,40 @@
 import 'package:equatable/equatable.dart';
+import 'package:ht_countries_client/ht_countries_client.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 
 part 'source.g.dart';
+
+/// Enum representing the type of news source.
+@JsonEnum(fieldRename: FieldRename.kebab)
+enum SourceType {
+  /// A global news agency (e.g., Reuters, Associated Press, Agence France-Presse).
+  newsAgency,
+
+  /// A news outlet focused on a specific local area (e.g., San Francisco Chronicle, Manchester Evening News).
+  localNewsOutlet,
+
+  /// A news outlet focused on a specific country (e.g., BBC News (UK), The New York Times (US)).
+  nationalNewsOutlet,
+
+  /// A news outlet with a broad international focus (e.g., Al Jazeera English, CNN International).
+  internationalNewsOutlet,
+
+  /// A publisher focused on a specific topic (e.g., TechCrunch (technology), ESPN (sports), Nature (science)).
+  specializedPublisher,
+
+  /// A blog or personal publication (e.g., Stratechery by Ben Thompson).
+  blog,
+
+  /// An official government source (e.g., WhiteHouse.gov, gov.uk).
+  governmentSource,
+
+  /// A service that aggregates news from other sources (e.g., Google News, Apple News).
+  aggregator,
+
+  /// Any other type of source not covered above (e.g., academic journals, company press releases).
+  other,
+}
 
 /// {@template source}
 /// Source model
@@ -16,9 +48,10 @@ class Source extends Equatable {
     required this.name,
     this.description,
     this.url,
-    this.category,
+    this.type,
     this.language,
-    this.country,
+    this.country, // Keep original country string for now if needed, or remove? Let's keep for now.
+    this.headquarters,
     String? id,
   }) : id = id ?? const Uuid().v4();
 
@@ -34,32 +67,39 @@ class Source extends Equatable {
 
   /// A description of the source.
   final String? description;
-
+      
   /// The URL of the source's homepage.
   final String? url;
 
-  /// The category the source belongs to (e.g., technology, sports).
-  final String? category;
+  /// The type of the source (e.g., newsAgency, blog).
+  final SourceType? type;
 
   /// The language code of the source (e.g., 'en', 'fr').
   final String? language;
 
   /// The country code of the source (e.g., 'us', 'gb').
+  /// Consider if this is still needed if headquarters provides country info.
+  /// Keeping it for now based on original structure.
   final String? country;
+
+  /// The country where the source is headquartered.
+  @JsonKey(name: 'headquarters')
+  final Country? headquarters;
 
   /// Converts this [Source] instance to a JSON map.
   Map<String, dynamic> toJson() => _$SourceToJson(this);
 
   @override
   List<Object?> get props => [
-    id,
-    name,
-    description,
-    url,
-    category,
-    language,
-    country,
-  ];
+        id,
+        name,
+        description,
+        url,
+        type,
+        language,
+        country,
+        headquarters,
+      ];
 
   /// Creates a new [Source] with updated properties.
   /// Use this to modify a [Source] without changing the original instance.
@@ -68,18 +108,20 @@ class Source extends Equatable {
     String? name,
     String? description,
     String? url,
-    String? category,
+    SourceType? type,
     String? language,
     String? country,
+    Country? headquarters,
   }) {
     return Source(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
       url: url ?? this.url,
-      category: category ?? this.category,
+      type: type ?? this.type,
       language: language ?? this.language,
       country: country ?? this.country,
+      headquarters: headquarters ?? this.headquarters,
     );
   }
 }
