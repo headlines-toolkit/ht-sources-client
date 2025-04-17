@@ -83,4 +83,4 @@ This package defines:
 
 ## License
 
-This software is licensed under the [PolyForm Free Trial License 1.0.0](LICENSE). Please review the terms before use.
+This software is licensed under the [PolyForm Free Trial](LICENSE). Please review the terms before use.
