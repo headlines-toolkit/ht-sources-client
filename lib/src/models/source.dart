@@ -1,12 +1,64 @@
 import 'package:equatable/equatable.dart';
 import 'package:ht_countries_client/ht_countries_client.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
-part 'source.g.dart';
+/// Helper function to convert SourceType enum to kebab-case string
+@visibleForTesting
+String? sourceTypeToJson(SourceType? type) {
+  if (type == null) return null;
+  switch (type) {
+    case SourceType.newsAgency:
+      return 'news-agency';
+    case SourceType.localNewsOutlet:
+      return 'local-news-outlet';
+    case SourceType.nationalNewsOutlet:
+      return 'national-news-outlet';
+    case SourceType.internationalNewsOutlet:
+      return 'international-news-outlet';
+    case SourceType.specializedPublisher:
+      return 'specialized-publisher';
+    case SourceType.blog:
+      return 'blog';
+    case SourceType.governmentSource:
+      return 'government-source';
+    case SourceType.aggregator:
+      return 'aggregator';
+    case SourceType.other:
+      return 'other';
+  }
+}
+
+/// Helper function to convert kebab-case string to SourceType enum
+@visibleForTesting
+SourceType? sourceTypeFromJson(String? typeString) {
+  if (typeString == null) return null;
+  switch (typeString) {
+    case 'news-agency':
+      return SourceType.newsAgency;
+    case 'local-news-outlet':
+      return SourceType.localNewsOutlet;
+    case 'national-news-outlet':
+      return SourceType.nationalNewsOutlet;
+    case 'international-news-outlet':
+      return SourceType.internationalNewsOutlet;
+    case 'specialized-publisher':
+      return SourceType.specializedPublisher;
+    case 'blog':
+      return SourceType.blog;
+    case 'government-source':
+      return SourceType.governmentSource;
+    case 'aggregator':
+      return SourceType.aggregator;
+    case 'other':
+      return SourceType.other;
+    default:
+      // Handle unknown types if necessary, or return null/default
+      return null;
+  }
+}
 
 /// Enum representing the type of news source.
-@JsonEnum(fieldRename: FieldRename.kebab)
 enum SourceType {
   /// A global news agency
   /// (e.g., Reuters, Associated Press, Agence France-Presse).
@@ -50,7 +102,6 @@ enum SourceType {
 ///
 /// Represents a news source.
 /// {@endtemplate}
-@JsonSerializable()
 class Source extends Equatable {
   /// {@macro source}
   Source({
@@ -64,7 +115,20 @@ class Source extends Equatable {
   }) : id = id ?? const Uuid().v4();
 
   /// Factory method to create a [Source] instance from a JSON map.
-  factory Source.fromJson(Map<String, dynamic> json) => _$SourceFromJson(json);
+  factory Source.fromJson(Map<String, dynamic> json) {
+    return Source(
+      id: json['id'] as String?,
+      name: json['name'] as String,
+      description: json['description'] as String?,
+      url: json['url'] as String?,
+      type: sourceTypeFromJson(json['type'] as String?),
+      language: json['language'] as String?,
+      headquarters:
+          json['headquarters'] == null
+              ? null
+              : Country.fromJson(json['headquarters'] as Map<String, dynamic>),
+    );
+  }
 
   /// Unique identifier for the source.
   final String id;
@@ -86,11 +150,33 @@ class Source extends Equatable {
   final String? language;
 
   /// The country where the source is headquartered.
-  @JsonKey(name: 'headquarters')
   final Country? headquarters;
 
   /// Converts this [Source] instance to a JSON map.
-  Map<String, dynamic> toJson() => _$SourceToJson(this);
+  Map<String, dynamic> toJson() {
+    // Start with required fields
+    final json = <String, dynamic>{'id': id, 'name': name};
+
+    // Add optional fields only if they are not null
+    if (description != null) {
+      json['description'] = description;
+    }
+    if (url != null) {
+      json['url'] = url;
+    }
+    if (type != null) {
+      json['type'] = sourceTypeToJson(type);
+    }
+    if (language != null) {
+      json['language'] = language;
+    }
+    if (headquarters != null) {
+      // Assumes Country has a toJson method (likely from json_serializable)
+      json['headquarters'] = headquarters!.toJson();
+    }
+
+    return json;
+  }
 
   @override
   List<Object?> get props => [
