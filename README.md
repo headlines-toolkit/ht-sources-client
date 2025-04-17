@@ -1,5 +1,9 @@
 # ht_sources_client
 
+![coverage: percentage](https://img.shields.io/badge/coverage-98-green)
+[![style: very good analysis](https://img.shields.io/badge/style-very_good_analysis-B22C89.svg)](https://pub.dev/packages/very_good_analysis) 
+[![License: PolyForm Free Trial](https://img.shields.io/badge/License-PolyForm%20Free%20Trial-blue)](https://polyformproject.org/licenses/free-trial/1.0.0)
+
 A Dart client interface for managing news sources.
 
 This package provides an abstract interface (`HtSourcesClient`) and data models (`Source`) for interacting with a news source backend. It defines the contract but does not include a concrete implementation.
@@ -83,4 +87,4 @@ This package defines:
 
 ## License
 
-This software is licensed under the [PolyForm Free Trial](LICENSE). Please review the terms before use.
+This package is licensed under the [PolyForm Free Trial](LICENSE). Please review the terms before use.
